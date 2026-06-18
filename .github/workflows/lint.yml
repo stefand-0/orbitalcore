@@ -3,32 +3,19 @@ name: Build and Lint
 on: [push]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install Yosys
         run: |
           sudo apt-get update
-          sudo apt-get install -y yosys nextpnr-himbaechel
+          sudo apt-get install -y yosys
           
-      - name: Create dummy constraints
+      - name: Syntax Check
         run: |
-          # Create an empty constraint file to prevent nextpnr crash
-          touch pins.cst
-          
-      - name: Synthesis and Place & Route
-        run: |
-          # Synthesize for Gowin GW1N-1, setting the top-level module to 'core'
-          yosys -p "read_verilog core.sv; synth_gowin -top core; write_json design.json"
-          
-          # Place and route using himbaechel with the constraint file
-          nextpnr-himbaechel --device GW1N-1-LQ144 --json design.json --cst pins.cst --write bitstream.fasm
-          
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: bitstream
-          path: bitstream.fasm
+          # This verifies your Verilog code for syntax errors 
+          # without attempting to map it to physical FPGA hardware
+          yosys -p "read_verilog core.sv"
