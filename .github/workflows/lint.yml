@@ -9,17 +9,18 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install FPGA Toolchain
-        uses: YosysHQ/setup-oss-cad-suite@v3
+        uses: YosysHQ/setup-oss-cad-suite@v4
         with:
           version: 'latest'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Synthesis and Place & Route
         run: |
-          # Synthesize
+          # 1. Synthesis: Read SV, map to Gowin, and output JSON
           yosys -p "read_verilog -sv main/core/core.sv; synth_gowin -top core; write_json design.json"
           
-          # Place and route
-          # Note: Ensure pins.cst exists in your repo or is created here
+          # 2. Place & Route: Map JSON to physical hardware using constraints
+          # Ensure 'pins.cst' is in the root or update the path below
           nextpnr-himbaechel --device GW1N-1-LQ144 --json design.json --cst pins.cst --write bitstream.fasm
 
       - name: Upload Bitstream
