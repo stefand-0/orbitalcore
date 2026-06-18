@@ -10,4 +10,4 @@ jobs:
 
       - run: sudo apt-get update && sudo apt-get install -y yosys
           
-      - run: yosys -p "read_verilog main/core/core.sv"
+      - run: yosys -p "read_verilog -sv main/core/core.sv"
