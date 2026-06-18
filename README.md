@@ -14,7 +14,7 @@ Featuring a unique, hardware-level **Interchangeable Wave Supply (IWS)** instruc
 
 ## Instruction Set Architecture (ISA) Reference
 
-[span_4](start_span)The following table outlines the complete instruction set for the OXS-Processor core[span_4](end_span):
+The following table outlines the complete instruction set for the Orbital Processor, based on the OXS-ISA also included in this repository:
 
 | Instruction Name | Opcode | Binary Encoding | Description | Cycle Count |
 | :--- | :--- | :--- | :--- | :--- |
