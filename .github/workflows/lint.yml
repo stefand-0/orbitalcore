@@ -16,10 +16,10 @@ jobs:
           
       - name: Synthesis and Place & Route
         run: |
-          # Read Verilog and synthesize for Gowin (GW1N-1 for Tang Nano 1K)
-          yosys -p "read_verilog core.sv; synth_gowin -top top; write_json design.json"
+          # Synthesize for Gowin GW1N-1, setting the top-level module to 'core'
+          yosys -p "read_verilog core.sv; synth_gowin -top core; write_json design.json"
           
-          # Place and route
+          # Place and route using himbaechel
           nextpnr-himbaechel --device GW1N-1-LQ144 --json design.json --write bitstream.fasm
           
       - name: Upload Artifacts
