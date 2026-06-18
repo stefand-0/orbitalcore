@@ -1,0 +1,11 @@
+// System Pins
+IO_LOC "clk" 52;
+IO_LOC "rstn" 3;
+
+IO_LOC "imemaddr[0]" 25; IO_LOC "imemaddr[1]" 26;
+IO_LOC "instr[0]" 27; IO_LOC "instr[1]" 28;
+
+// IWS / Periph Interface
+IO_LOC "iwsreg[0]" 29; IO_LOC "iwsreg[1]" 30;
+IO_LOC "iwswe" 31;
+
