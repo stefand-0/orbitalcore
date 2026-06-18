@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -16,14 +16,14 @@ jobs:
           
       - name: Synthesis and Place & Route
         run: |
-          # Read Verilog and synthesize for Gowin (using GW1N-1 for Tang Nano 1K)
+          # Read Verilog and synthesize for Gowin (GW1N-1 for Tang Nano 1K)
           yosys -p "read_verilog core.sv; synth_gowin -top top; write_json design.json"
           
           # Place and route
           nextpnr-himbaechel --device GW1N-1-LQ144 --json design.json --write bitstream.fasm
           
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bitstream
           path: bitstream.fasm
