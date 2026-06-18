@@ -26,6 +26,13 @@ module core(
       end     
     end else begin
       case (state)
+        FETCH: begin
+          state <= EXECUTE;
+        end
+        EXECUTE: begin
+          state <= FETCH; 
+        end
+        default: state <= FETCH;
       endcase
     end
   end
