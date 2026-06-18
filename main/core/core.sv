@@ -1,4 +1,4 @@
-module core(
+#mdodule core(
   // Clock and reset ins
   input logic clk,
   input logic rstn,
