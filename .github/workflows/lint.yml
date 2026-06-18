@@ -8,28 +8,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y yosys nextpnr-himbaechel
-
-      - name: Create constraints
-        run: |
-          # Create pins.cst - Add your board-specific pin numbers here!
-          # Example: IO_LOC "clk" 52;
-          cat <<EOF > pins.cst
-          IO_LOC "clk" 52;
-          IO_LOC "rstn" 3;
-          # Map your 16-bit buses here (repeat for all bits 0-15)
-          # IO_LOC "imemaddr[0]" X; ...
-          EOF
+      - name: Install FPGA Toolchain
+        uses: YosysHQ/setup-oss-cad-suite@v3
+        with:
+          version: 'latest'
 
       - name: Synthesis and Place & Route
         run: |
-          # Synthesize with -sv for SystemVerilog support
+          # Synthesize
           yosys -p "read_verilog -sv main/core/core.sv; synth_gowin -top core; write_json design.json"
           
-          # Route the design to the GW1N-1 FPGA
+          # Place and route
+          # Note: Ensure pins.cst exists in your repo or is created here
           nextpnr-himbaechel --device GW1N-1-LQ144 --json design.json --cst pins.cst --write bitstream.fasm
 
       - name: Upload Bitstream
