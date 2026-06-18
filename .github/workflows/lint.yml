@@ -1,1 +1,17 @@
+name: SystemVerilog Lint
 
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - name: Run Syntax Check (Lint)
+        # Using the path to your specific file
+        run: iverilog -g2012 -t null main/core/core.sv
