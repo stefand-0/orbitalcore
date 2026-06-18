@@ -1,17 +1,29 @@
-name: SystemVerilog Lint
+name: Build and Lint
 
 on: [push]
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Install Icarus Verilog
-        run: sudo apt-get update && sudo apt-get install -y iverilog
-
-      - name: Run Syntax Check (Lint)
-        # Using the path to your specific file
-        run: iverilog -g2012 -t null main/core/core.sv
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yosys nextpnr-himbaechel
+          
+      - name: Synthesis and Place & Route
+        run: |
+          # Read Verilog and synthesize for Gowin (using GW1N-1 for Tang Nano 1K)
+          yosys -p "read_verilog core.sv; synth_gowin -top top; write_json design.json"
+          
+          # Place and route
+          nextpnr-himbaechel --device GW1N-1-LQ144 --json design.json --write bitstream.fasm
+          
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: bitstream
+          path: bitstream.fasm
